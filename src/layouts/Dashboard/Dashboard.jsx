@@ -3,6 +3,12 @@ import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 // import MuiThemeProvider and createMuiTheme to create custom theme
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+// import jss and jss-rtl for change all style to support RTL
+import { create } from 'jss';
+import rtl from 'jss-rtl';
+import JssProvider from 'react-jss/lib/JssProvider';
+import { createGenerateClassName, jssPreset } from 'material-ui/styles';
+
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -21,6 +27,11 @@ import logo from "assets/img/reactlogo.png";
 const theme = createMuiTheme({
   direction: 'rtl'
 });
+// Configure JSS
+const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
+
+// Custom Material-UI class name generator.
+const generateClassName = createGenerateClassName();
 
 const switchRoutes = (
   <Switch>
@@ -55,34 +66,36 @@ class App extends React.Component {
     const { classes, ...rest } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
-      <div className={classes.wrapper}>
-        <Sidebar
-          routes={dashboardRoutes}
-          logoText={"Creative Tim"}
-          logo={logo}
-          image={image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color="blue"
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Header
-            routes={dashboardRoutes}
-            handleDrawerToggle={this.handleDrawerToggle}
-            {...rest}
-          />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
+        <JssProvider jss={jss} generateClassName={generateClassName}>
+          <div className={classes.wrapper}>
+            <Sidebar
+              routes={dashboardRoutes}
+              logoText={"Creative Tim"}
+              logo={logo}
+              image={image}
+              handleDrawerToggle={this.handleDrawerToggle}
+              open={this.state.mobileOpen}
+              color="blue"
+              {...rest}
+            />
+            <div className={classes.mainPanel} ref="mainPanel">
+              <Header
+                routes={dashboardRoutes}
+                handleDrawerToggle={this.handleDrawerToggle}
+                {...rest}
+              />
+              {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+              {this.getRoute() ? (
+                <div className={classes.content}>
+                  <div className={classes.container}>{switchRoutes}</div>
+                </div>
+              ) : (
+                <div className={classes.map}>{switchRoutes}</div>
+              )}
+              {this.getRoute() ? <Footer /> : null}
             </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {this.getRoute() ? <Footer /> : null}
-        </div>
-      </div>
+          </div>
+        </JssProvider>
       </MuiThemeProvider>
     );
   }
