@@ -6,6 +6,7 @@ import { drawerWidth, transition, container } from "assets/jss/material-dashboar
 
 const appStyle = theme => ({
   wrapper: {
+    direction: "rtl",
     position: "relative",
     top: "0",
     height: "100vh"
@@ -16,7 +17,7 @@ const appStyle = theme => ({
     },
     overflow: "auto",
     position: "relative",
-    float: "right",
+    float: "left",
     ...transition,
     maxHeight: "100%",
     width: "100%",
