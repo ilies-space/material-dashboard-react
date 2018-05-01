@@ -25,6 +25,7 @@ const chartCardStyle = {
   card,
   cardHeader: {
     ...cardHeader,
+    direction: "ltr",
     padding: "0",
     minHeight: "160px",
     ...defaultFont
