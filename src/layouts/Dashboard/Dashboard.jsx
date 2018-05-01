@@ -25,7 +25,10 @@ import logo from "assets/img/reactlogo.png";
 
 // create custom theme configuration
 const theme = createMuiTheme({
-  direction: 'rtl'
+  direction: 'rtl',
+  typography: {
+    fontFamily: '"Vazir", sans-serif'
+  }
 });
 // Configure JSS
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
